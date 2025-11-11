@@ -1,57 +1,67 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+// app/(tabs)/_layout.tsx
+import { Tabs } from "expo-router";
+import { useTheme } from "react-native-paper";
+import {
+  Home,
+  User,
+  Briefcase,
+  GraduationCap,
+  Sparkles,
+} from "lucide-react-native"; // Nossos ícones
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function TabsLayout() {
+  const theme = useTheme(); // Agora podemos usar o hook do Paper!
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: "gray",
+        headerStyle: {
+          backgroundColor: theme.colors.surface,
+        },
+        headerTintColor: theme.colors.onSurface,
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="index" // aponta para app/(tabs)/index.tsx
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Início",
+          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="about" // **ERRO 2:** Crie este arquivo! (app/(tabs)/about.tsx)
+        options={{
+          title: "Sobre",
+          tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="experience" // **ERRO 3:** Crie este arquivo! (app/(tabs)/experience.tsx)
+        options={{
+          title: "Experiência",
+          tabBarIcon: ({ color, size }) => (
+            <Briefcase color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="education" // **ERRO 4:** Crie este arquivo! (app/(tabs)/education.tsx)
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Formação",
+          tabBarIcon: ({ color, size }) => (
+            <GraduationCap color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="projects" // **ERRO 5:** Renomeie 'two.tsx' para 'projects.tsx'
+        options={{
+          title: "Projetos",
+          tabBarIcon: ({ color, size }) => (
+            <Sparkles color={color} size={size} />
+          ),
         }}
       />
     </Tabs>
