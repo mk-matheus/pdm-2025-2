@@ -1,44 +1,29 @@
-// app/_layout.tsx
+// CVMobile/app/_layout.tsx (CORRIGIDO PARA SUPORTAR DARK/LIGHT)
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
+// --- NOSSAS MUDANÇAS ---
+import { PaperProvider } from "react-native-paper";
+// Importa NOSSOS temas centralizados
+import {
+  NavLightTheme,
+  PaperLightTheme,
+  NavDarkTheme,
+  PaperDarkTheme,
+} from "@/constants/theme";
+// Importa o hook para detectar o tema do celular
 import { useColorScheme } from "@/components/useColorScheme";
-
-// --- NOSSA ADIÇÃO ---
-import { PaperProvider, MD3LightTheme } from "react-native-paper";
 // --------------------
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
-
-export const unstable_settings = {
-  initialRouteName: "(tabs)",
-};
+export { ErrorBoundary } from "expo-router";
+export const unstable_settings = { initialRouteName: "(tabs)" };
 
 SplashScreen.preventAutoHideAsync();
-
-// --- NOSSO TEMA CUSTOMIZADO ---
-const theme = {
-  ...MD3LightTheme,
-  colors: {
-    ...MD3LightTheme.colors,
-    primary: "rgb(0, 95, 175)",
-    onPrimary: "rgb(255, 255, 255)",
-    // ... adicione mais cores
-  },
-};
-// -------------------------
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -64,13 +49,18 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  // AQUI ESTÁ A MÁGICA:
+  // Detectamos o tema do celular (light ou dark)
   const colorScheme = useColorScheme();
 
+  // Escolhemos o conjunto de temas correto
+  const paperTheme = colorScheme === "dark" ? PaperDarkTheme : PaperLightTheme;
+  const navTheme = colorScheme === "dark" ? NavDarkTheme : NavLightTheme;
+
   return (
-    // Envolvemos o App no PaperProvider (para React Native Paper)
-    // E no ThemeProvider (para a navegação)
-    <PaperProvider theme={theme}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    // Passamos os temas dinâmicos para os providers corretos
+    <PaperProvider theme={paperTheme}>
+      <ThemeProvider value={navTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />

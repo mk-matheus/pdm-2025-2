@@ -26,7 +26,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-env"],
+    "plugins": [],
     "experiments": {
       "typedRoutes": true
     }

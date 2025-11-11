@@ -11,7 +11,7 @@ if (!baseURL) {
 
 const api = axios.create({
   baseURL: baseURL,
-  timeout: 5000, // 5 segundos de timeout
+  timeout: 15000, // 15 segundos de timeout
 });
 
 // Interceptor para lidar com erros de forma global (opcional, mas bom)

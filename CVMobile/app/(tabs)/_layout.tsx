@@ -1,66 +1,119 @@
-// app/(tabs)/_layout.tsx
+// CVMobile/app/(tabs)/_layout.tsx
 import { Tabs } from "expo-router";
-import { useTheme } from "react-native-paper";
+import { Appbar, useTheme } from "react-native-paper";
 import {
   Home,
   User,
   Briefcase,
   GraduationCap,
-  Sparkles,
-} from "lucide-react-native"; // Nossos ícones
+  ListChecks,
+} from "lucide-react-native";
 
 export default function TabsLayout() {
-  const theme = useTheme(); // Agora podemos usar o hook do Paper!
+  const theme = useTheme();
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: "gray",
-        headerStyle: {
+        tabBarStyle: {
           backgroundColor: theme.colors.surface,
         },
-        headerTintColor: theme.colors.onSurface,
       }}
     >
+      {/* --- TELA INÍCIO --- */}
       <Tabs.Screen
-        name="index" // aponta para app/(tabs)/index.tsx
+        name="index"
         options={{
-          title: "Início",
+          header: () => (
+            <Appbar.Header
+              style={{
+                backgroundColor: theme.colors.surface,
+                elevation: 2, // Movido para dentro do 'style'
+              }}
+            >
+              <Appbar.Content title="Início" />
+            </Appbar.Header>
+          ),
           tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
         }}
       />
+
+      {/* --- TELA SOBRE --- */}
       <Tabs.Screen
-        name="about" // **ERRO 2:** Crie este arquivo! (app/(tabs)/about.tsx)
+        name="about"
         options={{
-          title: "Sobre",
+          header: () => (
+            <Appbar.Header
+              style={{
+                backgroundColor: theme.colors.surface,
+                elevation: 2, // Movido para dentro do 'style'
+              }}
+            >
+              <Appbar.Content title="Sobre" />
+            </Appbar.Header>
+          ),
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />
+
+      {/* --- TELA EXPERIÊNCIA --- */}
       <Tabs.Screen
-        name="experience" // **ERRO 3:** Crie este arquivo! (app/(tabs)/experience.tsx)
+        name="experience"
         options={{
-          title: "Experiência",
+          header: () => (
+            <Appbar.Header
+              style={{
+                backgroundColor: theme.colors.surface,
+                elevation: 2, // Movido para dentro do 'style'
+              }}
+            >
+              <Appbar.Content title="Experiência" />
+            </Appbar.Header>
+          ),
           tabBarIcon: ({ color, size }) => (
             <Briefcase color={color} size={size} />
           ),
         }}
       />
+
+      {/* --- TELA FORMAÇÃO --- */}
       <Tabs.Screen
-        name="education" // **ERRO 4:** Crie este arquivo! (app/(tabs)/education.tsx)
+        name="education"
         options={{
-          title: "Formação",
+          header: () => (
+            <Appbar.Header
+              style={{
+                backgroundColor: theme.colors.surface,
+                elevation: 2, // Movido para dentro do 'style'
+              }}
+            >
+              <Appbar.Content title="Formação" />
+            </Appbar.Header>
+          ),
           tabBarIcon: ({ color, size }) => (
             <GraduationCap color={color} size={size} />
           ),
         }}
       />
+
+      {/* --- TELA HABILIDADES (ANTIGA PROJETOS) --- */}
       <Tabs.Screen
-        name="projects" // **ERRO 5:** Renomeie 'two.tsx' para 'projects.tsx'
+        name="projects"
         options={{
-          title: "Projetos",
+          header: () => (
+            <Appbar.Header
+              style={{
+                backgroundColor: theme.colors.surface,
+                elevation: 2, // Movido para dentro do 'style'
+              }}
+            >
+              <Appbar.Content title="Habilidades" />
+            </Appbar.Header>
+          ),
           tabBarIcon: ({ color, size }) => (
-            <Sparkles color={color} size={size} />
+            <ListChecks color={color} size={size} />
           ),
         }}
       />
