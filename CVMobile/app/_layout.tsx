@@ -1,4 +1,4 @@
-// CVMobile/app/_layout.tsx (CORRIGIDO PARA SUPORTAR DARK/LIGHT)
+// CVMobile/app/_layout.tsx (ATUALIZADO)
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -6,18 +6,17 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
-// --- NOSSAS MUDANÇAS ---
 import { PaperProvider } from "react-native-paper";
-// Importa NOSSOS temas centralizados
 import {
   NavLightTheme,
   PaperLightTheme,
   NavDarkTheme,
   PaperDarkTheme,
-} from "@/constants/theme";
-// Importa o hook para detectar o tema do celular
-import { useColorScheme } from "@/components/useColorScheme";
+} from "@/constants/theme"; // Nossos temas definidos
+
+// --- NOSSAS MUDANÇAS ---
+// 1. Importamos nosso novo Provedor e Hook
+import { CustomThemeProvider, useCustomTheme } from "@/contexts/ThemeContext";
 // --------------------
 
 export { ErrorBoundary } from "expo-router";
@@ -45,20 +44,25 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  // 2. Envolvemos o App no CustomThemeProvider
+  return (
+    <CustomThemeProvider>
+      <RootLayoutNav />
+    </CustomThemeProvider>
+  );
 }
 
 function RootLayoutNav() {
-  // AQUI ESTÁ A MÁGICA:
-  // Detectamos o tema do celular (light ou dark)
-  const colorScheme = useColorScheme();
+  // 3. Usamos nosso hook para saber qual tema está ATIVO
+  const { effectiveTheme } = useCustomTheme();
 
-  // Escolhemos o conjunto de temas correto
-  const paperTheme = colorScheme === "dark" ? PaperDarkTheme : PaperLightTheme;
-  const navTheme = colorScheme === "dark" ? NavDarkTheme : NavLightTheme;
+  // 4. Escolhemos o conjunto de temas correto
+  const paperTheme =
+    effectiveTheme === "dark" ? PaperDarkTheme : PaperLightTheme;
+  const navTheme = effectiveTheme === "dark" ? NavDarkTheme : NavLightTheme;
 
   return (
-    // Passamos os temas dinâmicos para os providers corretos
+    // 5. Passamos os temas dinâmicos para os providers
     <PaperProvider theme={paperTheme}>
       <ThemeProvider value={navTheme}>
         <Stack>

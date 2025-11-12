@@ -1,4 +1,4 @@
-// CVMobile/app/(tabs)/_layout.tsx
+// CVMobile/app/(tabs)/_layout.tsx (ATUALIZADO COM HEADER DINÂMICO)
 import { Tabs } from "expo-router";
 import { Appbar, useTheme } from "react-native-paper";
 import {
@@ -7,7 +7,41 @@ import {
   Briefcase,
   GraduationCap,
   ListChecks,
+  Github,
+  Sun, // 1. Ícone para Modo Claro
+  Moon, // 2. Ícone para Modo Escuro
 } from "lucide-react-native";
+import { useCustomTheme } from "@/contexts/ThemeContext"; // 3. Importamos o hook do tema
+
+// 4. Componente auxiliar para o Header da Home (necessário para usar o hook)
+const HomeHeader = () => {
+  const theme = useTheme();
+  // 5. Pegamos o tema ATIVO e a função para MUDAR
+  const { effectiveTheme, setThemePreference } = useCustomTheme();
+  const isDark = effectiveTheme === "dark";
+
+  return (
+    <Appbar.Header
+      style={{
+        backgroundColor: theme.colors.surface,
+        elevation: 2,
+      }}
+    >
+      <Appbar.Content title="Início" />
+      {/* 6. Este é o novo "botão" (Switch) de tema */}
+      <Appbar.Action
+        icon={() =>
+          isDark ? (
+            <Sun color={theme.colors.onSurface} />
+          ) : (
+            <Moon color={theme.colors.onSurface} />
+          )
+        }
+        onPress={() => setThemePreference(isDark ? "light" : "dark")}
+      />
+    </Appbar.Header>
+  );
+};
 
 export default function TabsLayout() {
   const theme = useTheme();
@@ -22,20 +56,12 @@ export default function TabsLayout() {
         },
       }}
     >
-      {/* --- TELA INÍCIO --- */}
+      {/* --- TELA INÍCIO (ATUALIZADA) --- */}
       <Tabs.Screen
-        name="index"
+        name="index" //
         options={{
-          header: () => (
-            <Appbar.Header
-              style={{
-                backgroundColor: theme.colors.surface,
-                elevation: 2, // Movido para dentro do 'style'
-              }}
-            >
-              <Appbar.Content title="Início" />
-            </Appbar.Header>
-          ),
+          // 7. Usamos nosso novo componente de Header
+          header: () => <HomeHeader />,
           tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
         }}
       />
@@ -46,10 +72,7 @@ export default function TabsLayout() {
         options={{
           header: () => (
             <Appbar.Header
-              style={{
-                backgroundColor: theme.colors.surface,
-                elevation: 2, // Movido para dentro do 'style'
-              }}
+              style={{ backgroundColor: theme.colors.surface, elevation: 2 }}
             >
               <Appbar.Content title="Sobre" />
             </Appbar.Header>
@@ -58,16 +81,15 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* --- TELA EXPERIÊNCIA --- */}
+      {/* ... (Restante das suas abas: experience, education, skills, projects) ... */}
+      {/* ... (Certifique-se de que elas também usam o Appbar.Header) ... */}
+
       <Tabs.Screen
         name="experience"
         options={{
           header: () => (
             <Appbar.Header
-              style={{
-                backgroundColor: theme.colors.surface,
-                elevation: 2, // Movido para dentro do 'style'
-              }}
+              style={{ backgroundColor: theme.colors.surface, elevation: 2 }}
             >
               <Appbar.Content title="Experiência" />
             </Appbar.Header>
@@ -77,17 +99,12 @@ export default function TabsLayout() {
           ),
         }}
       />
-
-      {/* --- TELA FORMAÇÃO --- */}
       <Tabs.Screen
         name="education"
         options={{
           header: () => (
             <Appbar.Header
-              style={{
-                backgroundColor: theme.colors.surface,
-                elevation: 2, // Movido para dentro do 'style'
-              }}
+              style={{ backgroundColor: theme.colors.surface, elevation: 2 }}
             >
               <Appbar.Content title="Formação" />
             </Appbar.Header>
@@ -97,17 +114,12 @@ export default function TabsLayout() {
           ),
         }}
       />
-
-      {/* --- TELA HABILIDADES (ANTIGA PROJETOS) --- */}
       <Tabs.Screen
-        name="projects"
+        name="skills"
         options={{
           header: () => (
             <Appbar.Header
-              style={{
-                backgroundColor: theme.colors.surface,
-                elevation: 2, // Movido para dentro do 'style'
-              }}
+              style={{ backgroundColor: theme.colors.surface, elevation: 2 }}
             >
               <Appbar.Content title="Habilidades" />
             </Appbar.Header>
@@ -115,6 +127,19 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <ListChecks color={color} size={size} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="projects"
+        options={{
+          header: () => (
+            <Appbar.Header
+              style={{ backgroundColor: theme.colors.surface, elevation: 2 }}
+            >
+              <Appbar.Content title="Projetos" />
+            </Appbar.Header>
+          ),
+          tabBarIcon: ({ color, size }) => <Github color={color} size={size} />,
         }}
       />
     </Tabs>
